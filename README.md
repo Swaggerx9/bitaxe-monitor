@@ -183,6 +183,9 @@ Para que el script se ejecute automáticamente dentro de una sesión de `screen`
     ```bash
     screen -ls
     ```
+## Compatibilidad
+
+Este script ha sido probado en un **Bitaxe Gamma** con **AxeOS**. Debería funcionar con otros modelos de Bitaxe que usen **AxeOS**, aunque la compatibilidad con otros modelos no ha sido verificada.
 
 ## Notas
 
