@@ -190,6 +190,6 @@ Para que el script se ejecute automáticamente dentro de una sesión de `screen`
 - **Gestión del log**: El archivo `./bitaxe.log` puede crecer con el tiempo. Considera limpiarlo periódicamente o implementar un script para rotar logs manualmente.
 - **Personalización**: Puedes ajustar los umbrales de temperatura (`TEMPERATURA_LIMITE`, `TEMPERATURA_SEGURA`) y el intervalo de notificaciones (`HORA_ALERTA`) en `bitaxe.conf`.
 
-## Licencia
+## License
 
-Este script se proporciona sin garantía. Úsalo bajo tu propio riesgo y asegúrate de probarlo en un entorno controlado antes de usarlo en producción.
+This project is licensed under the [MIT License](LICENSE).
