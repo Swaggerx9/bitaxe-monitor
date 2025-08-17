@@ -1,6 +1,6 @@
 # Bitaxe Temperature Monitor
 
-Este script de Bash (`monitor_bitaxe.sh`) monitorea la temperatura de un dispositivo Bitaxe a través de su API, ajusta la frecuencia (400 MHz o 525 MHz) según los umbrales de temperatura configurados, y envía notificaciones a un chat de Telegram cuando se realizan cambios. El script incluye registro de errores en un archivo local y verifica el estado actual para evitar cambios redundantes.
+Este script de Bash (`temp_bitaxe.sh`) monitorea la temperatura de un dispositivo Bitaxe a través de su API, ajusta la frecuencia (400 MHz o 525 MHz) según los umbrales de temperatura configurados, y envía notificaciones a un chat de Telegram cuando se realizan cambios. El script incluye registro de errores en un archivo local y verifica el estado actual para evitar cambios redundantes.
 
 ## Requisitos
 
@@ -44,7 +44,7 @@ Este script de Bash (`monitor_bitaxe.sh`) monitorea la temperatura de un disposi
 ## Instalación
 
 1. **Descarga el script**:
-   - Guarda el script `monitor_bitaxe.sh` en un directorio de tu elección (por ejemplo, `/home/user/bitaxe/`).
+   - Guarda el script `temp_bitaxe.sh` en un directorio de tu elección (por ejemplo, `/home/user/bitaxe/`).
 
 2. **Crear el archivo de configuración**:
    - Crea un archivo llamado `bitaxe.conf` en el mismo directorio que el script.
@@ -55,7 +55,7 @@ Este script de Bash (`monitor_bitaxe.sh`) monitorea la temperatura de un disposi
      TELEGRAM_chat_id="123456789"
      TEMPERATURA_LIMITE=66
      TEMPERATURA_SEGURA=61
-     HORA_ALERTA=3600
+     HORA_ALERTA=7200
      IP_LOCAL_BITAXE=192.168.1.10
      ```
    - **Explicación de las variables**:
@@ -69,7 +69,7 @@ Este script de Bash (`monitor_bitaxe.sh`) monitorea la temperatura de un disposi
 3. **Establecer permisos**:
    - Asegúrate de que el script sea ejecutable:
      ```bash
-     chmod +x monitor_bitaxe.sh
+     chmod +x temp_bitaxe.sh
      ```
    - Protege el archivo de configuración para que solo el usuario que ejecuta el script pueda leerlo:
      ```bash
@@ -92,7 +92,7 @@ El script debe ejecutarse en una sesión persistente para que siga corriendo inc
 2. **Ejecutar el script**:
    - Dentro de la sesión de `screen`, ejecuta:
      ```bash
-     ./monitor_bitaxe.sh
+     ./temp_bitaxe.sh
      ```
    - El script comenzará a monitorear la temperatura y enviar notificaciones a Telegram.
 
@@ -123,20 +123,20 @@ Para que el script se ejecute automáticamente dentro de una sesión de `screen`
      ```bash
      crontab -e
      ```
-   - Agrega la siguiente línea al final del archivo, reemplazando `/path/to/monitor_bitaxe.sh` con la ruta completa al script (por ejemplo, `/home/user/bitaxe/monitor_bitaxe.sh`):
+   - Agrega la siguiente línea al final del archivo, reemplazando `/path/to/temp_bitaxe.sh` con la ruta completa al script (por ejemplo, `/home/user/bitaxe/temp_bitaxe.sh`):
      ```bash
-     @reboot sleep 30 && screen -dmS bitaxe_monitor /bin/bash /path/to/monitor_bitaxe.sh
+     @reboot sleep 30 && screen -dmS bitaxe_monitor /bin/bash /path/to/temp_bitaxe.sh
      ```
    - **Explicación**:
      - `@reboot`: Ejecuta el comando al iniciar el servidor.
      - `sleep 30`: Espera 30 segundos para asegurar que la red esté disponible.
      - `screen -dmS bitaxe_monitor`: Inicia una sesión de `screen` en modo desatendido (`-dm`) con el nombre `bitaxe_monitor`.
-     - `/bin/bash /path/to/monitor_bitaxe.sh`: Ejecuta el script dentro de la sesión de `screen`.
+     - `/bin/bash /path/to/temp_bitaxe.sh`: Ejecuta el script dentro de la sesión de `screen`.
 
 2. **Verificar la sesión de `screen`**:
    - Después de reiniciar el servidor, verifica que la sesión de `screen` esté corriendo:
      ```bash
-     screen -list
+     screen -ls
      ```
    - Deberías ver algo como:
      ```
@@ -150,7 +150,7 @@ Para que el script se ejecute automáticamente dentro de una sesión de `screen`
 - **Monitoreo de temperatura**:
   - El script consulta la temperatura del Bitaxe cada 5 minutos a través de su API (`http://<IP_LOCAL_BITAXE>/api/system/info`).
   - Si la temperatura supera `TEMPERATURA_LIMITE` (66 °C por defecto), baja la frecuencia a 400 MHz y envía una notificación a Telegram con el prefijo `[ALTA PRIORIDAD]`.
-  - Si la temperatura baja por debajo de `TEMPERATURA_SEGURA` (61 °C por defecto) y han pasado al menos `HORA_ALERTA` (1 hora) desde la última notificación, sube la frecuencia a 525 MHz y envía una notificación con el prefijo `[Normal]`.
+  - Si la temperatura baja por debajo de `TEMPERATURA_SEGURA` (61 °C por defecto) y han pasado al menos `HORA_ALERTA` (2 hora) desde la última notificación, sube la frecuencia a 525 MHz y envía una notificación con el prefijo `[Normal]`.
 
 - **Notificaciones**:
   - Las notificaciones se envían a través de la API de Telegram al chat especificado en `TELEGRAM_CHAT_ID`.
@@ -181,7 +181,7 @@ Para que el script se ejecute automáticamente dentro de una sesión de `screen`
 - **Verificar la sesión de `screen`**:
   - Si el script no parece estar corriendo, verifica si la sesión de `screen` está activa:
     ```bash
-    screen -list
+    screen -ls
     ```
 
 ## Notas
